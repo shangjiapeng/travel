@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>收藏排行榜</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/ranking-list.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.pagination.css">
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/jquery.pagination.min.js"></script>
+    <script src="js/getParameter.js"></script>
+
+    <script>
+        $(function () {
+
+            //1 当页面加载完成之后调用方法加载数据
+            load(1);
+
+            //给搜索框绑定点击事件,获取搜索框的内容
+            $("#search_button").click(function () {
+                var rname = $("#routeName").val();
+                var minPrice = $("#minPrice").val();
+                var maxPrice = $("#maxPrice").val();
+                // alert(rname);
+                // alert(minPrice);
+                // alert(maxPrice);
+
+                //判断rname如果不为null或者""
+                if(rname){
+                    //url解码
+                    rname = window.decodeURIComponent(rname);
+                }
+                load(1, rname, minPrice, maxPrice);
+            });
+
+        });
+
+        function load(currentPage, rname, minPrice, maxPrice) {
+            //2 发送异步ajax请求
+            $.get("route/favoriteRankPage", {currentPage: currentPage, rname: rname, minPrice:minPrice, maxPrice:maxPrice}, function (data) {
+                //3 解析数据展示到页面上
+                //3.1 展示分页条
+                $("#pagination3").pagination({
+                    currentPage: data.currentPage,
+                    totalPage: data.totalPage,
+                    isShow: true,
+                    count: 10,
+                    homePageText: "首页",
+                    endPageText: "尾页",
+                    prevPageText: "上一页",
+                    nextPageText: "下一页",
+                    callback: function (currentPage,rname,minPrice,maxPrice) {
+                        load(currentPage,rname,minPrice,maxPrice);
+                        //定位到页面的顶部
+                        window.scrollTo(0, 0);
+                    }
+                });
+                //路线裂变展示区
+                var route_lis = "";
+
+                for (var i = 0; i < data.list.length; i++) {
+                    var route = data.list[i];
+                    var li = ' <li>\n' +
+                        '        <span class=" num ">' + (i + 1) + '</span>\n' +
+                        '         <a href="route_detail.html?rid=' + route.rid + '"><img src="' + route.rimage + '" alt=""></a>\n' +
+                        '         <h4><a href="route_detail.html?rid=' + route.rid + '">' + route.rname + '</a></h4>\n' +
+                        '         <p>\n' +
+                        '          <b class="price">&yen;<span>' + route.price + '</span>起</b>\n' +
+                        '          <span class="shouchang">已收藏' + route.count + '次</span>\n' +
+                        '         </p>\n' +
+                        '      </li>';
+                    route_lis += li;
+                }
+                $("#route").html(route_lis);
+
+            }, "json")
+        }
+
+    </script>
+</head>
+<body>
+<!--引入头部-->
+<div id="header"></div>
+<div class="contant">
+    <div class="shaixuan">
+        <span>线路名称</span>
+        <input type="text" id="routeName">
+        <span>金额</span>
+        <input type="text" id="minPrice">~<input type="text" id="maxPrice">
+        <button id="search_button">搜索</button>
+    </div>
+    <div class="list clearfix">
+        <ul id="route">
+            <li>
+                <span class="num one">1</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num two">2</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num">3</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num">4</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num">5</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num">6</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num">7</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+            <li>
+                <span class="num">8</span>
+                <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
+                <h4><a href="route_detail.html">【尾单特卖】全国-曼谷6-7天自由行 泰国出境旅游 特价往6-7天自由行 泰国出境旅游 特价往..</a></h4>
+                <p>
+                    <b class="price">&yen;<span>899</span>起</b>
+                    <span class="shouchang">已收藏450次</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="pageNum">
+        <ul>
+            <!--<li><a href="">首页</a></li>
+            <li class="threeword"><a href="#">上一页</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">6</a></li>
+            <li><a href="#">7</a></li>
+            <li><a href="#">8</a></li>
+            <li><a href="#">9</a></li>
+            <li><a href="#">10</a></li>
+            <li class="threeword"><a href="javascript:;">下一页</a></li>
+            <li class="threeword"><a href="javascript:;">末页</a></li>-->
+            <div class="box">
+                <div id="pagination3" class="page fl"></div>
+            </div>
+        </ul>
+    </div>
+</div>
+
+<!--导入底部-->
+<div id="footer"></div>
+<!--导入布局js，共享header和footer-->
+<script type="text/javascript" src="js/include.js"></script>
+</body>
+</html>
